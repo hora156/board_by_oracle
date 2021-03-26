@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.example.mapper.BoardMapper">
+    
+    <select id="allBoard" resultType="com.example.entity.Board">
+        SELECT * 
+        FROM (
+        select row_number() over(order by regdate desc) as
+        row_num, 
+        bno, 
+        title, 
+        writer, 
+        regdate,
+        viewCnt 
+        from tbl_board
+        ) 
+        <if test="firstRecordIndex != null and lastRecordIndex != null">
+        	where row_num between #{firstRecordIndex} and
+        	#{lastRecordIndex}
+        </if>
+    </select>
+    
+    <select id="tableCount" resultType="int">
+    	select count(*) from tbl_board
+    </select>
+    
+    <insert id="create">
+    	insert into 
+    	tbl_board (
+    	bno, 
+    	title, 
+    	content, 
+    	writer, 
+    	regdate 
+    	)
+    	values (
+    	board_seq.nextval, 
+    	#{title}, 
+    	#{content}, 
+    	#{writer}, 
+    	SYSDATE
+    	)
+    </insert>
+    
+    <select id="read" parameterType="String" resultType="com.example.entity.Board">
+    	select * from tbl_board where bno = #{value}
+    </select>
+    
+    <update id="update">
+    	update tbl_board set 
+    	title = #{title}, 
+    	content = #{content}, 
+    	writer = #{writer}
+    	where 
+    	bno = #{bno}
+    </update>
+    
+    <delete id="delete" parameterType="String">
+    	delete from tbl_board where bno = #{value}
+    </delete>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</mapper>
